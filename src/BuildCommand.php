@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CreativeCommoners\CreateSSDemo;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * Creates a Docker image from the current working directory
@@ -20,6 +21,23 @@ class BuildCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Hello world');
+        $process = $this->getProcess(['docker', 'ps']);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            $output->writeln('<error>Something went wrong!</error>');
+        } else {
+            $output->writeln('<info>Image build successful</info>');
+        }
+        $output->writeln($process->getOutput());
+    }
+
+    /**
+     * @param mixed ...$args
+     * @return Process
+     */
+    protected function getProcess(...$args): Process
+    {
+        return new Process(...$args);
     }
 }
