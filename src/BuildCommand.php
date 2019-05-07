@@ -23,11 +23,19 @@ class BuildCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this
-            ->copyDockerTemplates($output)
-            ->buildDockerImage($output)
-            ->tagDockerImage($output)
-            ->removeDockerTemplates($output);
+        if (!$this->copyDockerTemplates($output)) {
+            return;
+        }
+        if (!$this->buildDockerImage($output)) {
+            return;
+        }
+        if(!$this->tagDockerImage($output)) {
+            return;
+        }
+        if (!$this->removeDockerTemplates($output)) {
+            return;
+        }
+        $output->writeln('<info>All finished.</info>');
     }
 
     protected function getProcess(...$args): Process
@@ -42,7 +50,7 @@ class BuildCommand extends Command
         return new Filesystem();
     }
 
-    protected function buildDockerImage(OutputInterface $output): BuildCommand
+    protected function buildDockerImage(OutputInterface $output): bool
     {
         // todo argument
         $name = 'tbc-demo';
@@ -60,19 +68,19 @@ class BuildCommand extends Command
 
         if (!$process->isSuccessful()) {
             $output->writeln('<error>Something went wrong!</error>');
-        } else {
-            $output->writeln('<info>Image build successful</info>');
+            return false;
         }
 
-        return $this;
+        $output->writeln('<info>Image build successful</info>');
+        return true;
     }
 
-    protected function tagDockerImage(OutputInterface $output): BuildCommand
+    protected function tagDockerImage(OutputInterface $output): bool
     {
         // todo argument
         $name = 'tbc-demo';
         $user = 'robbieaverill';
-        $version = '0.1';
+        $version = '0.2';
 
         $output->writeln('<comment>Getting new image ID</comment>');
         $process = $this->getProcess("docker image ls --filter reference='{$name}:latest' --format '{{.ID}}'");
@@ -92,7 +100,7 @@ class BuildCommand extends Command
         if (!$process->isSuccessful()) {
             $output->writeln('<error>Error tagging image!</error>');
             $output->writeln($process->getOutput());
-            return $this;
+            return false;
         }
 
         $output->writeln('<comment>Pushing tag to Docker Hub</comment>');
@@ -101,17 +109,16 @@ class BuildCommand extends Command
         if (!$process->isSuccessful()) {
             $output->writeln('<error>Error pushing tag to Docker Hub!</error>');
             $output->writeln($process->getOutput());
-            return $this;
+            return false;
         }
 
         $output->writeln(
             '<info>' . $user . '/' . $name . ':' . $version . ' (' . $imageId . ') pushed to Docker Hub</info>'
         );
-
-        return $this;
+        return true;
     }
 
-    protected function copyDockerTemplates(OutputInterface $output): BuildCommand
+    protected function copyDockerTemplates(OutputInterface $output): bool
     {
         try {
             $this->getFilesystem()->mirror(CREATE_SS_DEMO_ROOT . '/docker', getcwd());
@@ -120,15 +127,15 @@ class BuildCommand extends Command
             $output->writeln('<error>Failed to sync Docker templates:</error>');
             throw $exception;
         }
-        return $this;
+        return true;
     }
 
-    protected function removeDockerTemplates(OutputInterface $output): BuildCommand
+    protected function removeDockerTemplates(OutputInterface $output): bool
     {
         $output->writeln(
             '<comment>Docker templates need to be cleaned up, run `git clean -fd` if you use Git'
             . ' and have tracked everything</comment>'
         );
-        return $this;
+        return true;
     }
 }
