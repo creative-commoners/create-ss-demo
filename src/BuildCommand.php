@@ -31,7 +31,9 @@ class BuildCommand extends Command
 
     protected function getProcess(...$args): Process
     {
-        return new Process(...$args);
+        $process = new Process(...$args);
+        $process->setTimeout(null);
+        return $process;
     }
 
     protected function getFilesystem(): Filesystem
