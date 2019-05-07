@@ -32,4 +32,8 @@ docker login
 
 ## Usage
 
-You have a local environment ready to share with someone, and you want to publish it 
+You have a local environment ready to share with someone, and you want to publish it. The steps involved are:
+
+* Build a Docker container
+* Publish it
+* Create the demo instance
