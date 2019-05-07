@@ -1,5 +1,7 @@
 # create-ss-demo
 
+[![Build Status](https://travis-ci.org/creative-commoners/create-ss-demo.svg?branch=master)](https://travis-ci.org/creative-commoners/create-ss-demo)
+
 A command line utility that creates demo sites using the SilverStripe Platform API.
 
 ## Requirements
