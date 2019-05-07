@@ -23,19 +23,10 @@ class BuildCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $process = $this->getProcess(['docker', 'ps']);
-        $process->run();
-
-        $this->copyDockerTemplates($output);
-
-        if (!$process->isSuccessful()) {
-            $output->writeln('<error>Something went wrong!</error>');
-        } else {
-            $output->writeln('<info>Image build successful</info>');
-        }
-        $output->writeln($process->getOutput());
-
-        $this->removeDockerTemplates($output);
+        $this
+            ->copyDockerTemplates($output)
+            ->buildDockerImage($output)
+            ->removeDockerTemplates($output);
     }
 
     protected function getProcess(...$args): Process
@@ -46,6 +37,31 @@ class BuildCommand extends Command
     protected function getFilesystem(): Filesystem
     {
         return new Filesystem();
+    }
+
+    protected function buildDockerImage(OutputInterface $output): BuildCommand
+    {
+        // todo argument
+        $name = 'tbc-demo';
+
+        $output->writeln('Building main Docker image: ' . $name);
+        $process = $this->getProcess(['docker', 'build', '-t', $name, '.']);
+        $process->run(function ($type, $buffer) use ($output) {
+            if (Process::OUT === $type) {
+                // stdout
+                return $output->writeln($buffer);
+            }
+            // stderr
+            return $output->writeln('<error>ERROR: </error> ' . $buffer);
+        });
+
+        if (!$process->isSuccessful()) {
+            $output->writeln('<error>Something went wrong!</error>');
+        } else {
+            $output->writeln('<info>Image build successful</info>');
+        }
+
+        return $this;
     }
 
     protected function copyDockerTemplates(OutputInterface $output): BuildCommand
