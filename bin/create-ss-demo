@@ -1,11 +1,13 @@
 #!/usr/bin/env php
 <?php
 
+define('CREATE_SS_DEMO_ROOT', __DIR__ . '/../');
+
 foreach ([
     // Root project installation, i.e. Travis
-    __DIR__ . '/../vendor/autoload.php',
+    realpath(CREATE_SS_DEMO_ROOT . 'vendor/autoload.php'),
     // Installed globally with Composer
-    __DIR__ . '/../../../autoload.php',
+    dirname(CREATE_SS_DEMO_ROOT, 2) . '../vendor/autoload.php',
 ] as $autoloaderPath) {
     if (file_exists($autoloaderPath)) {
         require_once $autoloaderPath;

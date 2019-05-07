@@ -5,6 +5,7 @@ namespace CreativeCommoners\CreateSSDemo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
@@ -24,20 +25,37 @@ class BuildCommand extends Command
         $process = $this->getProcess(['docker', 'ps']);
         $process->run();
 
+        $this->copyDockerTemplates($output);
+
         if (!$process->isSuccessful()) {
             $output->writeln('<error>Something went wrong!</error>');
         } else {
             $output->writeln('<info>Image build successful</info>');
         }
         $output->writeln($process->getOutput());
+
+        $this->removeDockerTemplates($output);
     }
 
-    /**
-     * @param mixed ...$args
-     * @return Process
-     */
     protected function getProcess(...$args): Process
     {
         return new Process(...$args);
+    }
+
+    protected function getFilesystem(): Filesystem
+    {
+        return new Filesystem();
+    }
+
+    protected function copyDockerTemplates(OutputInterface $output): BuildCommand
+    {
+        $this->getFilesystem()->mirror(__DIR__ . '/docker', getcwd());
+
+        return $this;
+    }
+
+    protected function removeDockerTemplates(OutputInterface $output): BuildCommand
+    {
+        return $this;
     }
 }
