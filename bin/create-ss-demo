@@ -1,7 +1,16 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+foreach ([
+    // Root project installation, i.e. Travis
+    __DIR__ . '/../vendor/autoload.php',
+    // Installed globally with Composer
+    __DIR__ . '/../../../autoload.php',
+] as $autoloaderPath) {
+    if (file_exists($autoloaderPath)) {
+        require_once $autoloaderPath;
+    }
+}
 
 use CreativeCommoners\CreateSSDemo\BuildCommand;
 use Symfony\Component\Console\Application;
