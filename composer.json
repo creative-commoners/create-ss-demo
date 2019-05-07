@@ -22,5 +22,8 @@
             "CreativeCommoners\\CreateSSDemo\\": "src/",
             "CreativeCommoners\\CreateSSDemo\\Tests\\": "tests/"
         }
-    }
+    },
+    "bin": [
+        "bin/create-ss-demo"
+    ]
 }
