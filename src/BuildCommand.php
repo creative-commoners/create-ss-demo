@@ -26,6 +26,7 @@ class BuildCommand extends Command
         $this
             ->copyDockerTemplates($output)
             ->buildDockerImage($output)
+            ->tagDockerImage($output)
             ->removeDockerTemplates($output);
     }
 
@@ -47,23 +48,36 @@ class BuildCommand extends Command
         $name = 'tbc-demo';
 
         $output->writeln('Building main Docker image: ' . $name);
-        $process = $this->getProcess(['docker', 'build', '-t', $name, '.']);
-        $process->run(function ($type, $buffer) use ($output) {
-            if (Process::OUT === $type) {
-                // stdout
-                return $output->writeln($buffer);
-            }
-            // stderr
-            return $output->writeln('<error>ERROR: </error> ' . $buffer);
-        });
-
-        if (!$process->isSuccessful()) {
-            $output->writeln('<error>Something went wrong!</error>');
-        } else {
-            $output->writeln('<info>Image build successful</info>');
-        }
+//        $process = $this->getProcess(['docker', 'build', '-t', $name, '.']);
+//        $process->run(function ($type, $buffer) use ($output) {
+//            if (Process::OUT === $type) {
+//                // stdout
+//                return $output->writeln($buffer);
+//            }
+//            // stderr
+//            return $output->writeln('<error>ERROR: </error> ' . $buffer);
+//        });
+//
+//        if (!$process->isSuccessful()) {
+//            $output->writeln('<error>Something went wrong!</error>');
+//        } else {
+//            $output->writeln('<info>Image build successful</info>');
+//        }
 
         return $this;
+    }
+
+    protected function tagDockerImage(OutputInterface $output): BuildCommand
+    {
+        // todo argument
+        $name = 'tbc-demo';
+
+        $output->writeln('* Getting new image ID');
+        $process = $this->getProcess('docker image ls | grep "$NAME"');
+        $process->run(null, ['NAME' => $name]);
+        $output->writeln('<info>Build image ID: ' . $process->getOutput() . '</info>');
+
+        $output->writeln('* Tagging new image');
     }
 
     protected function copyDockerTemplates(OutputInterface $output): BuildCommand
