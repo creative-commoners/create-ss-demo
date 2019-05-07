@@ -5,6 +5,7 @@ namespace CreativeCommoners\CreateSSDemo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -49,13 +50,21 @@ class BuildCommand extends Command
 
     protected function copyDockerTemplates(OutputInterface $output): BuildCommand
     {
-        $this->getFilesystem()->mirror(__DIR__ . '/docker', getcwd());
-
+        try {
+            $this->getFilesystem()->mirror(CREATE_SS_DEMO_ROOT . '/docker', getcwd());
+            $output->writeln('* Docker templates copied into current directory');
+        } catch (IOException $exception) {
+            $output->writeln('<error>Failed to sync Docker templates:</error>');
+            throw $exception;
+        }
         return $this;
     }
 
     protected function removeDockerTemplates(OutputInterface $output): BuildCommand
     {
+        $output->writeln(
+            '* Docker templates need to be cleaned up, run `git clean -fd` if you use Git and have tracked everything'
+        );
         return $this;
     }
 }

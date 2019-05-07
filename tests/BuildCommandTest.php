@@ -7,6 +7,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class BuildCommandTest extends TestCase
@@ -22,6 +23,11 @@ class BuildCommandTest extends TestCase
     protected $process;
 
     /**
+     * @var Filesystem&MockObject
+     */
+    protected $filesystem;
+
+    /**
      * @var BuildCommand&MockObject
      */
     protected $command;
@@ -33,12 +39,14 @@ class BuildCommandTest extends TestCase
         $this->application = new Application();
 
         $this->process = $this->createMock(Process::class);
-
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->command = $this->getMockBuilder(BuildCommand::class)
             ->setConstructorArgs(['build'])
-            ->setMethods(['getProcess'])
+            ->setMethods(['getProcess', 'getFilesystem'])
             ->getMock();
+
         $this->command->expects($this->any())->method('getProcess')->willReturn($this->process);
+        $this->command->expects($this->any())->method('getFilesystem')->willReturn($this->filesystem);
 
         $this->application->add($this->command);
     }
