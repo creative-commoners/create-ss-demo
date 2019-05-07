@@ -3,6 +3,7 @@
 namespace CreativeCommoners\CreateSSDemo;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -18,23 +19,31 @@ class BuildCommand extends Command
 
     protected function configure()
     {
+        $this
+            ->addArgument('name', InputArgument::REQUIRED, 'The Docker image name')
+            ->addArgument('username', InputArgument::REQUIRED, 'Your Docker Hub username')
+            ->addArgument('version', InputArgument::REQUIRED, 'The version to tag the image with');
+
         $this->setDescription('Builds a Docker image from the current working directory');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('<comment>Building and pushing Docker image for ' . getcwd() . '</comment>');
+
         if (!$this->copyDockerTemplates($output)) {
             return;
         }
-        if (!$this->buildDockerImage($output)) {
+        if (!$this->buildDockerImage($input, $output)) {
             return;
         }
-        if(!$this->tagDockerImage($output)) {
+        if (!$this->tagDockerImage($input, $output)) {
             return;
         }
         if (!$this->removeDockerTemplates($output)) {
             return;
         }
+
         $output->writeln('<info>All finished.</info>');
     }
 
@@ -50,10 +59,9 @@ class BuildCommand extends Command
         return new Filesystem();
     }
 
-    protected function buildDockerImage(OutputInterface $output): bool
+    protected function buildDockerImage(InputInterface $input, OutputInterface $output): bool
     {
-        // todo argument
-        $name = 'tbc-demo';
+        $name = $input->getArgument('name');
 
         $output->writeln('<comment>Building main Docker image</comment>: ' . $name);
         $process = $this->getProcess(['docker', 'build', '-t', $name, '.']);
@@ -75,12 +83,11 @@ class BuildCommand extends Command
         return true;
     }
 
-    protected function tagDockerImage(OutputInterface $output): bool
+    protected function tagDockerImage(InputInterface $input, OutputInterface $output): bool
     {
-        // todo argument
-        $name = 'tbc-demo';
-        $user = 'robbieaverill';
-        $version = '0.2';
+        $name = $input->getArgument('name');
+        $user = $input->getArgument('username');
+        $version = $input->getArgument('version');
 
         $output->writeln('<comment>Getting new image ID</comment>');
         $process = $this->getProcess("docker image ls --filter reference='{$name}:latest' --format '{{.ID}}'");

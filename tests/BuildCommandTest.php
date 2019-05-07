@@ -56,7 +56,12 @@ class BuildCommandTest extends TestCase
         $this->process->expects($this->any())->method('isSuccessful')->willReturn(true);
 
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['command' => 'build']);
+        $commandTester->execute([
+            'command' => 'build',
+            'name' => 'bar',
+            'username' => 'foo',
+            'version' => '0.0',
+        ]);
 
         $output = $commandTester->getDisplay();
         $this->assertContains('Image build successful', $output);
@@ -67,7 +72,12 @@ class BuildCommandTest extends TestCase
         $this->process->expects($this->any())->method('isSuccessful')->willReturn(false);
 
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['command' => 'build']);
+        $commandTester->execute([
+            'command' => 'build',
+            'name' => 'bar',
+            'username' => 'foo',
+            'version' => '0.0',
+        ]);
 
         $output = $commandTester->getDisplay();
         $this->assertContains('Something went wrong!', $output);
