@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="create-ss-demo">
+  <!-- base rules are PSR-12 -->
+  <rule ref="PSR12"/>
+
+  <!-- include php files only -->
+  <arg name="extensions" value="php,lib,inc,php5"/>
+
+  <exclude-pattern>/docker/*</exclude-pattern>
+</ruleset>

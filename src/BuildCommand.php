@@ -6,6 +6,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Creates a Docker image from the current working directory
+ */
 class BuildCommand extends Command
 {
     protected static $defaultName = 'build';
