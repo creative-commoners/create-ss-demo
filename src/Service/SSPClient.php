@@ -4,7 +4,6 @@ namespace CreativeCommoners\CreateSSDemo\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 

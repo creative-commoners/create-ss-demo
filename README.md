@@ -30,6 +30,14 @@ Ensure you have logged into your Docker Hub account:
 docker login
 ```
 
+You will also need to have set up a SilverStripe Platform API token (which can be done through the "My profile" section)
+and have it defined in environment variables:
+
+* `SS_DEMO_AUTH_USER`: your SSP email address
+* `SS_DEMO_AUTH_KEY`: your SSP API token
+
+Ensure you don't commit these into any codebases anywhere.
+
 ## Usage
 
 You have a local environment ready to share with someone, and you want to publish it. The steps involved are:
