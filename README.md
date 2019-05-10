@@ -71,7 +71,7 @@ To request a demo instance, run `create-ss-demo instantiate` with the following 
 * `snapshot_id`: The sspak snapshot ID from SilverStripe platform to use for content, e.g. 12846
 
 ```
-create-ss-demo instantiate site_name johnsmith/sprint-2019-01-02:0.1 mystack 12846
+create-ss-demo instantiate johnsmithsprint1 johnsmith/sprint-2019-01-02:0.1 mystack 12846
 ```
 
 The SilverStripe Platform API will start processing your request, and the command will poll occasionally and provide
