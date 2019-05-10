@@ -56,7 +56,7 @@ create-ss-demo build sprint-2019-01-02 johnsmith 0.1
 This will build a Docker image with the specified name, tag it as the specified version, and push it to Docker Hub
 under the specified username.
 
-### Create the demo instance (todo: write this command)
+### Create the demo instance
 
 Once you have a Docker container, you can ask SilverStripe Platform to build a demo environment with it. You will also
 need a [sspak](https://github.com/silverstripe/sspak) snapshot which will need to be uploaded to a SilverStripe
@@ -65,12 +65,13 @@ the "Snapshots" section.
 
 To request a demo instance, run `create-ss-demo instantiate` with the following arguments:
 
+* `site_name`: The site name used for the demo subdomain, e.g. `johnsmithsprint1` (cannot contain dashes etc)
 * `image`: The Docker Hub image name and tag/version, e.g. "johnsmith/sprint-2019-01-02:01"
 * `stack_name`: The SilverStripe platform stack code, e.g. `mystack`
 * `snapshot_id`: The sspak snapshot ID from SilverStripe platform to use for content, e.g. 12846
 
 ```
-create-ss-demo instantiate johnsmith/sprint-2019-01-02:0.1 mystack 12846
+create-ss-demo instantiate site_name johnsmith/sprint-2019-01-02:0.1 mystack 12846
 ```
 
 The SilverStripe Platform API will start processing your request, and the command will poll occasionally and provide

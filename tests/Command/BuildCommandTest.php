@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace CreativeCommoners\CreateSSDemo\Tests;
+namespace CreativeCommoners\CreateSSDemo\Tests\Command;
 
-use CreativeCommoners\CreateSSDemo\BuildCommand;
+use CreativeCommoners\CreateSSDemo\Command\BuildCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;

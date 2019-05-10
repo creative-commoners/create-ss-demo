@@ -16,11 +16,13 @@ foreach ($autoloaderPaths as $autoloaderPath) {
     }
 }
 
-use CreativeCommoners\CreateSSDemo\BuildCommand;
+use CreativeCommoners\CreateSSDemo\Command\BuildCommand;
+use CreativeCommoners\CreateSSDemo\Command\InstantiateCommand;
 use Symfony\Component\Console\Application;
 
-$application = new Application();
+$application = new Application('Create SilverStripe demo sites');
 
 $application->add(new BuildCommand());
+$application->add(new InstantiateCommand());
 
 $application->run();

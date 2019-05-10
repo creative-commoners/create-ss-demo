@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace CreativeCommoners\CreateSSDemo;
+namespace CreativeCommoners\CreateSSDemo\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
