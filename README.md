@@ -42,8 +42,9 @@ Ensure you don't commit these into any codebases anywhere.
 
 You have a local environment ready to share with someone, and you want to publish it. The steps involved are:
 
-* Build and publish a Docker container
-* Create the demo instance
+* Build and publish (`build`) a Docker container
+* Create (`instantiate`) the demo instance
+* Destroy (`destroy`) the demo instance once finished with it
 
 ### Building the Docker container
 
@@ -95,6 +96,11 @@ Once your demo environment is no longer required you should close it down to pre
 you can run `create-ss-demo destroy` with the following arguments:
 
 * `demo_id`: The demo site ID to destroy
+* `stack_name`: The SilverStripe platform stack code, e.g. `mystack`
+
+```
+create-ss-demo destroy 1123 mystack
+```
 
 **Note:** You will need to have necessary permissions on the demo's original SilverStripe Platform stack in order
 to perform this action.

@@ -67,11 +67,34 @@ class SSPClient
         return 0;
     }
 
+    /**
+     * Gets the status of a demo build from SilverStripe Platform, and will return the raw API result data
+     *
+     * @param string $stackName
+     * @param int $demoId
+     * @param string $environment
+     * @return array
+     */
     public function status(string $stackName, int $demoId, string $environment = 'prod'): array
     {
         $response = $this->makeRequest('GET', $this->getEndpoint($stackName, $environment, $demoId));
 
         return json_decode((string)$response->getBody(), true) ?: [];
+    }
+
+    /**
+     * Ask SilverStripe Platform to destroy an existing demo site
+     *
+     * @param string $stackName
+     * @param int $demoId
+     * @param string $environment
+     * @return bool
+     */
+    public function destroy(string $stackName, int $demoId, string $environment = 'prod'): bool
+    {
+        $result = $this->makeRequest('DELETE', $this->getEndpoint($stackName, $environment, $demoId));
+
+        return $result->getStatusCode() === 204;
     }
 
     public function setClient(ClientInterface $client): SSPClient
