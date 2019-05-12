@@ -90,7 +90,7 @@ it. This can now be shared with other people.
 **Note:** You will need to have necessary permissions on the specified SilverStripe Platform stack in order
 to perform this action.
 
-### Destroying demo sites (todo: write this command)
+### Destroying demo sites
 
 Once your demo environment is no longer required you should close it down to prevent wasting AWS resources. To do this
 you can run `create-ss-demo destroy` with the following arguments:
