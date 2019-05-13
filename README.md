@@ -65,6 +65,21 @@ create-ss-demo build sprint-2019-01-02 johnsmith 0.1
 This will build a Docker image with the specified name, tag it as the specified version, and push it to Docker Hub
 under the specified username.
 
+#### Custom environment variables
+
+If your demo site image needs to have custom environment variables defined in it, add them to a `.env` file in the
+project's folder you're building. These will be merged with the default container environment variables when
+the SilverStripe application runs.
+
+```
+# File: .env
+FOO=BAR
+```
+
+**Important:** Your Docker image will need to be public on Docker Hub in order for SilverStripe Platform to access
+and use it for demo builds. For this reason, **ensure you do not include any sensitive data in your `.env` file.**
+Only use mocked values and do not store any API keys, etc.
+
 ### Create the demo instance
 
 Once you have a Docker container, you can ask SilverStripe Platform to build a demo environment with it. You will also
